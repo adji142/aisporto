@@ -63,8 +63,3 @@ jobs:
           local_path: ./
           remote_path: ${{ secrets.FTP_DIR }}
           delete_remote_files: false
-          exclude: |
-            **/node_modules/**
-            **/tests/**
-            **/.git*
-            **/storage/logs/**
