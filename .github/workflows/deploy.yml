@@ -54,12 +54,16 @@ jobs:
 
       # 7. Deploy via FTP
       - name: 📂 Deploy to FTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: 22
-          local_path: ./
-          remote_path: ${{ secrets.FTP_DIR }}
-          delete_remote_files: false
+          port: 21
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_DIR }}
+          exclude: |
+            **/node_modules/**
+            **/tests/**
+            **/.git*
+            **/storage/logs/**
