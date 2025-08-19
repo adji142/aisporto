@@ -63,9 +63,8 @@ jobs:
           local-dir: ./dist/
           server-dir: ${{ secrets.FTP_DIR }}
           exclude: |
-            *
-          include: |
-            deploy.zip
+            **/*
+            !deploy.zip
 
       - name: Run deploy script With Shell 3
         run: curl "https://aissystem.org/deployscript/deploy.php?token=Lagis3nt0s@"
