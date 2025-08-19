@@ -34,4 +34,4 @@ jobs:
 
       # 4. Run bash script
       - name: Run deploy script
-        run: /home/aisk7155/cron/patroli/compressimage.sh
+        run: curl "https://domainmu.com/deploy.php?token=Lagis3nt0s@"
