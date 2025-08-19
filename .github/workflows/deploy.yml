@@ -42,7 +42,8 @@ jobs:
           zip -r deploy.zip . \
             -x "node_modules/*" \
             -x "storage/logs/*" \
-            -x "public/build/*"
+            -x "public/build/*" \
+            -x "vendor/*"
 
       # Debug: cek apakah deploy.zip ada
       - name: Check deploy.zip exists
