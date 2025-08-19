@@ -35,11 +35,11 @@ jobs:
       # 🔑 Generate SQL dari migration + seeder
       - name: Run migrations locally
         run: |
-          php artisan migrate --force
+          php artisan migrate --force --pretend --seed > database/migrations.sql
 
       - name: Create deployment package
         run: |
-          zip -r deploy.zip node_modules public/build vendor
+          zip -r deploy.zip node_modules public/build vendor database/migrations.sql
 
       # Debug: cek apakah deploy.zip ada
       - name: Check deploy.zip exists
