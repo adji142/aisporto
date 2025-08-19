@@ -41,7 +41,7 @@ jobs:
         run: zip -r deploy.zip . -x ".git/*" ".github/*" "node_modules/*" "vendor/bin/*"
 
       - name: Upload via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
