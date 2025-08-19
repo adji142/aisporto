@@ -6,32 +6,54 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      # 2. Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          extensions: mbstring, bcmath, curl, intl, mysql
-          tools: composer
+          extensions: mbstring, bcmath, gd, pdo, pdo_mysql
 
-      # 3. Setup Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
-      # 4. Make bash file executable
-      # - name: Make deploy.sh executable
-      #   run: chmod +x /home/aisk7155/public_html/deployscript/deploy.sh
+      - name: Install NPM deps and build
+        run: |
+          npm ci
+          npm run build
 
-      # 4. Run bash script
+      # 🔑 Generate SQL dari migration + seeder
+      - name: Generate migrations.sql
+        run: |
+          php artisan migrate --pretend --seed > migrations.sql
+
+      - name: Archive build
+        run: zip -r deploy.zip . -x ".git/*" ".github/*" "node_modules/*" "vendor/bin/*"
+
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_DIR }}
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules*
+            **/vendor/bin*
+
       - name: Run deploy script With Shell 3
         run: curl "https://aissystem.org/deployscript/deploy.php?token=Lagis3nt0s@"
+        
