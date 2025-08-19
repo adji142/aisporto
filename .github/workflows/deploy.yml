@@ -41,6 +41,9 @@ jobs:
       - name: Check dist files
         run: ls -lah dist
 
+      - name: Run Initial Deploy
+        run: curl "https://aissystem.org/deployscript/init_deploy.php?token=Lagis3nt0s@"
+
       - name: 📂 Deploy to FTP (upload only deploy.zip and parts)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
