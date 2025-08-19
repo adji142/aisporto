@@ -39,11 +39,7 @@ jobs:
 
       - name: Create deployment package
         run: |
-          zip -r deploy.zip . \
-            -x "node_modules/*" \
-            -x "storage/logs/*" \
-            -x "public/build/*" \
-            -x "vendor/*"
+          zip -r deploy.zip node_modules public/build vendor
 
       # Debug: cek apakah deploy.zip ada
       - name: Check deploy.zip exists
