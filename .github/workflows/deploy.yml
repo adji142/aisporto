@@ -1,62 +1,53 @@
-name: Deploy Laravel App
+name: 🚀 Deploy Laravel ke Shared Hosting
 
 on:
   push:
     branches:
-      - main
+      - main  # branch yang memicu deploy
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      # 1️⃣ Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          extensions: mbstring, bcmath, gd, pdo, pdo_mysql
+      # 2️⃣ Install PHP dependencies (Composer) di GitHub Actions
+      - name: Install PHP dependencies
+        run: |
+          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
-      - name: Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install NPM deps and build
+      # 3️⃣ Build frontend assets (npm / Vite / Laravel Mix)
+      - name: Build frontend assets
         run: |
           npm ci
           npm run build
 
-      - name: Create split deployment package (max 20MB per file)
+      # 4️⃣ Install lftp
+      - name: Install lftp
         run: |
-          mkdir dist
-          zip -r -s 10m dist/deploy.zip node_modules public/build vendor
+          sudo apt-get update
+          sudo apt-get install -y lftp
 
-      # Debug: cek apakah file split ada
-      - name: Check dist files
-        run: ls -lah dist
-
-      - name: Run Initial Deploy
-        run: curl "https://aissystem.org/deployscript/init_deploy.php?token=Lagis3nt0s@"
-
-      - name: 📂 Deploy to FTP (upload only deploy.zip and parts)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-          local-dir: ./dist/
-          server-dir: ./
-          exclude: |
-            **/*
-            !deploy.zip
-            !deploy.z*
-
-      - name: Run deploy script With Shell 5
-        run: curl "https://aissystem.org/deployscript/deploy.php?token=Lagis3nt0s@"
+      # 5️⃣ Upload semua file yang diperlukan ke shared hosting
+      - name: Deploy via FTP (incremental)
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lftp -u $FTP_USER,$FTP_PASSWORD $FTP_HOST <<EOF
+          set ftp:ssl-allow no
+          
+          # Upload incremental: file baru atau diubah
+          mirror -R --only-newer --parallel=5 --verbose \
+            --exclude .git/ \
+            --exclude .github/ \
+            --exclude node_modules/ \
+            ./ /public_html/
+          quit
+          EOF
+      - name: Run deploy script With Shell
+        run: curl "https://aissystem.org/deploy.php?token=Lagis3nt0s@"
