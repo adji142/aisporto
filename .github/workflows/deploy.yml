@@ -37,10 +37,6 @@ jobs:
         run: |
           php artisan migrate --force
 
-      - name: Dump database after migrate & seed
-        run: |
-          mysqldump -u root -p lagis3nt0s4 aisporto > migrations.sql
-
       - name: Archive build
         run: zip -r deploy.zip . -x ".git/*" ".github/*" "node_modules/*" "vendor/bin/*"
 
