@@ -29,9 +29,9 @@ jobs:
           node-version: 18
 
       # 4. Make bash file executable
-      - name: Make deploy.sh executable
-        run: chmod +x /home/aisk7155/public_html/deployscript/deploy.sh
+      # - name: Make deploy.sh executable
+      #   run: chmod +x /home/aisk7155/public_html/deployscript/deploy.sh
 
-      # 5. Run bash script
+      # 4. Run bash script
       - name: Run deploy script
         run: /home/aisk7155/public_html/deployscript/deploy.sh
