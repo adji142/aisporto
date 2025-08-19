@@ -32,14 +32,9 @@ jobs:
           npm ci
           npm run build
 
-      # 🔑 Generate SQL dari migration + seeder
-      - name: Run migrations locally
-        run: |
-          php artisan migrate --force --pretend --seed > database/migrations.sql
-
       - name: Create deployment package
         run: |
-          zip -r deploy.zip node_modules public/build vendor database/migrations.sql
+          zip -r deploy.zip node_modules public/build vendor
 
       # Debug: cek apakah deploy.zip ada
       - name: Check deploy.zip exists
@@ -67,5 +62,5 @@ jobs:
         run: curl "https://aissystem.org/deployscript/deploy.php?token=Lagis3nt0s@"
 
       - name: Set Default User
-        run: php artisan make:filament-user --name="Super Admin" --email=admin@aissystem.org --password=ais123AIS
+        run: php artisan make:filament-user --name="Melisa" --email=melisa@aissystem.org --password=melisa123MELISA
         
