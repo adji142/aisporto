@@ -60,7 +60,4 @@ jobs:
 
       - name: Run deploy script With Shell 3
         run: curl "https://aissystem.org/deployscript/deploy.php?token=Lagis3nt0s@"
-
-      - name: Set Default User
-        run: php artisan make:filament-user --name="Melisa" --email=melisa@aissystem.org --password=melisa123MELISA
         
