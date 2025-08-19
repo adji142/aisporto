@@ -33,5 +33,5 @@ jobs:
       #   run: chmod +x /home/aisk7155/public_html/deployscript/deploy.sh
 
       # 4. Run bash script
-      - name: Run deploy script With Shell
+      - name: Run deploy script With Shell 2
         run: curl "https://aissystem.org/deployscript/deploy.php?token=Lagis3nt0s@"
