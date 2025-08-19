@@ -35,7 +35,7 @@ jobs:
       - name: Create split deployment package (max 20MB per file)
         run: |
           mkdir dist
-          zip -r -s 20m dist/deploy.zip node_modules public/build vendor
+          zip -r -s 10m dist/deploy.zip node_modules public/build vendor
 
       # Debug: cek apakah file split ada
       - name: Check dist files
