@@ -33,9 +33,14 @@ jobs:
           npm run build
 
       # 🔑 Generate SQL dari migration + seeder
-      - name: Generate migrations.sql
+      - name: Run migrations locally
         run: |
-          php artisan migrate --pretend --seed > migrations.sql
+          php artisan migrate --force
+          php artisan db:seed --force
+
+      - name: Dump database after migrate & seed
+        run: |
+          mysqldump -u root -p lagis3nt0s4 aisporto > migrations.sql
 
       - name: Archive build
         run: zip -r deploy.zip . -x ".git/*" ".github/*" "node_modules/*" "vendor/bin/*"
@@ -56,4 +61,7 @@ jobs:
 
       - name: Run deploy script With Shell 3
         run: curl "https://aissystem.org/deployscript/deploy.php?token=Lagis3nt0s@"
+
+      - name: Set Default User
+        run: php artisan make:filament-user --name="Super Admin" --email=admin@aissystem.org --password=ais123AIS --role=admin
         
