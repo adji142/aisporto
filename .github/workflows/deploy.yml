@@ -36,7 +36,6 @@ jobs:
       - name: Run migrations locally
         run: |
           php artisan migrate --force
-          php artisan db:seed --force
 
       - name: Dump database after migrate & seed
         run: |
