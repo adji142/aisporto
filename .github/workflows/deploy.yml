@@ -48,6 +48,11 @@ jobs:
       - name: Check deploy.zip exists
         run: ls -lah
 
+      - name: Move deploy.zip to dist folder
+        run: |
+          mkdir dist
+          mv deploy.zip dist/
+
       - name: 📂 Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -55,7 +60,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
-          local-dir: ./
+          local-dir: ./dist
           server-dir: ${{ secrets.FTP_DIR }}
           exclude: |
             *
