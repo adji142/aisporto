@@ -44,6 +44,10 @@ jobs:
             -x "storage/logs/*" \
             -x "public/build/*"
 
+      # Debug: cek apakah deploy.zip ada
+      - name: Check deploy.zip exists
+        run: ls -lah
+
       - name: 📂 Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
