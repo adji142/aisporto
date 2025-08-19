@@ -50,7 +50,7 @@ jobs:
           mkdir dist
           mv deploy.zip dist/
 
-      - name: 📂 Deploy to FTP 
+      - name: 📂 Deploy to FTP with spesific name
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
