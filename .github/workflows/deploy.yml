@@ -46,7 +46,7 @@ jobs:
             --exclude .git/ \
             --exclude .github/ \
             --exclude node_modules/ \
-            ./ /public_html/
+            ./ /
           quit
           EOF
       - name: Run deploy script With Shell
