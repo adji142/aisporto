@@ -1,6 +1,6 @@
 @extends('frontend.layout')
 
-@section('title', 'Portfolio')
+@section('title', 'Blog')
 
 @section('content')
 {{-- Hero Section --}}
