@@ -36,7 +36,7 @@
 
             <h2 class="text-2xl font-semibold mb-4">{{ $blog->title }}</h2>
 
-            <div class="prose max-w-none text-gray-700 mb-6">{!! $blog->description !!}</div>
+            <div class="prose max-w-none text-gray-700 mb-6">{!! $blog->content !!}</div>
 
             @if($blog->link)
                 <a href="{{ $blog->link }}" target="_blank"
