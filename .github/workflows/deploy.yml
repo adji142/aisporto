@@ -22,7 +22,6 @@ jobs:
       # 3️⃣ Build frontend assets (npm / Vite / Laravel Mix)
       - name: Build frontend assets
         run: |
-          npm ci
           npm install
           npm run build
 
