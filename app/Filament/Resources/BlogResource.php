@@ -60,6 +60,16 @@ class BlogResource extends Resource
             Forms\Components\TagsInput::make('tags')
                 ->label('Tag SEO')
                 ->placeholder('Tambah tag...'),
+            Forms\Components\Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                        'archive' => 'Archive',
+                    ])
+                    ->default('draft')
+                    ->required()
+                    ->native(false),
         ]);
     }
 
@@ -67,6 +77,14 @@ class BlogResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('status')
+                ->badge()
+                ->sortable()
+                ->colors([
+                    'secondary' => 'draft',
+                    'success' => 'published',
+                    'danger' => 'archive',
+                ]),
                 Tables\Columns\TextColumn::make('headline')->searchable(),
                 Tables\Columns\TextColumn::make('title')->searchable(),
                 Tables\Columns\TextColumn::make('category.name')->label('Kategori'),
@@ -79,13 +97,40 @@ class BlogResource extends Resource
                     ->counts('views') // Filament v3 mendukung langsung menghitung relasi
                     ->sortable()
             ])
-            ->filters([])
+            ->filters([
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('Filter by Status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                        'archive' => 'Archive',
+                    ]),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkAction::make('set_draft')
+                    ->label('Set Draft')
+                    ->icon('heroicon-o-pencil')
+                    ->requiresConfirmation()
+                    ->action(fn ($records) => $records->each->update(['status' => 'draft'])),
+
+                Tables\Actions\BulkAction::make('set_published')
+                    ->label('Set Published')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(fn ($records) => $records->each->update(['status' => 'published'])),
+
+                Tables\Actions\BulkAction::make('set_archive')
+                    ->label('Set Archive')
+                    ->icon('heroicon-o-archive-box')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->action(fn ($records) => $records->each->update(['status' => 'archive'])),
             ]);
     }
 

@@ -17,6 +17,7 @@ class Portfolio extends Model
         'thumbnail',
         'slug',
         'link',
+        'status'
     ];
 
     public function views()

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Helpers\ViewHelper;
+
+
 use App\Models\SiteSetting;
 use App\Models\Service;
 use App\Models\HighlightProduct;
@@ -17,14 +20,15 @@ class LandingPageController extends Controller
         $siteSetting = SiteSetting::with('banners')->first();
         $services = Service::orderBy('id', 'asc')->get();
         $highlight = HighlightProduct::first();
-        $portfolios = Portfolio::latest()->take(6)->get();
-        $blogs = Blog::latest()->take(3)->get();
+        $portfolios = Portfolio::where('status','Published')
+                        ->latest()->take(6)->get();
+        $blogs = Blog::where('status','Published')->latest()->take(3)->get();
 
         return view('frontend.index', compact('siteSetting','services','highlight','portfolios','blogs'));
     }
 
     public function portofolio(){
-        $portfolios = Portfolio::latest()->paginate(6);
+        $portfolios = Portfolio::where('status','Published')->latest()->paginate(6);
         $siteSetting = SiteSetting::with('banners')->first();
         return view('frontend.portofolio', compact('portfolios','siteSetting'));
     }
@@ -34,11 +38,14 @@ class LandingPageController extends Controller
                     ->with('images')
                     ->firstOrFail();
         $siteSetting = SiteSetting::with('banners')->first();
+
+        ViewHelper::log($portfolio);
+
         return view('frontend.portofolio-detail', compact('portfolio','siteSetting'));
     }
 
     public function blog(){
-        $blog = Blog::latest()->paginate(6);
+        $blog = Blog::where('status','Published')->latest()->paginate(6);
         $siteSetting = SiteSetting::with('banners')->first();
         return view('frontend.blog', compact('blog','siteSetting'));
     }
@@ -47,6 +54,7 @@ class LandingPageController extends Controller
         $blog = Blog::where('slug', $slug)
                     ->firstOrFail();
         $siteSetting = SiteSetting::with('banners')->first();
+        ViewHelper::log($blog);
         return view('frontend.blog-detail', compact('blog','siteSetting'));
     }
 }

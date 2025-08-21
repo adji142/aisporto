@@ -17,6 +17,7 @@ class Blog extends Model
         'thumbnail',
         'slug',
         'tags',
+        'status'
     ];
 
     protected $casts = [
