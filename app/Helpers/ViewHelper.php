@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\View;
 use Illuminate\Support\Facades\Auth;
+use Stevebauman\Location\Facades\Location;
 
 class ViewHelper
 {
@@ -11,6 +12,7 @@ class ViewHelper
     {
         $ip = request()->ip();
         $userId = Auth::id();
+        $location = Location::get($ip);
 
         // Cegah view berulang dari user/IP yang sama dalam waktu 1 jam
         $exists = View::where('viewable_type', get_class($model))
@@ -31,6 +33,10 @@ class ViewHelper
                 'viewable_id'   => $model->id,
                 'user_id'       => $userId,
                 'ip_address'    => $ip,
+                'country'       => $location?->countryName ?? 'Unknown',
+                'region'        => $location?->regionName ?? 'Unknown',
+                'city'          => $location?->cityName ?? 'Unknown',
+                'user_agent'    => request()->header('User-Agent'),
             ]);
         }
     }
